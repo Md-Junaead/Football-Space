@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:football_space/config/app_colors.dart';
@@ -804,7 +803,6 @@ class _MatchDetailScreenState extends State<MatchDetailScreen> {
     final name = player['name']?.toString() ?? '';
     final number = player['number']?.toString() ?? '';
     final pos = player['pos']?.toString() ?? '';
-    final photo = player['photo']?.toString() ?? '';
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
