@@ -1,7 +1,7 @@
 // lib/features/home/widgets/date_bar.dart
 
 import 'package:flutter/material.dart';
-import 'package:football_live_score/config/app_colors.dart';
+import 'package:football_space/config/app_colors.dart';
 
 class DateBar extends StatefulWidget {
   final String? selectedDate;

@@ -1,10 +1,10 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:football_live_score/config/app_colors.dart';
-import 'package:football_live_score/core/routes/app_router.dart';
-import 'package:football_live_score/core/routes/app_routes.dart';
-import 'package:football_live_score/features/home/cubit/home_cubit.dart';
+import 'package:football_space/config/app_colors.dart';
+import 'package:football_space/core/routes/app_router.dart';
+import 'package:football_space/core/routes/app_routes.dart';
+import 'package:football_space/features/home/cubit/home_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

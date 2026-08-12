@@ -1,5 +1,5 @@
 name: football_space
-description: "A new Flutter project."
+description: "Football Live Score — live matches, leagues & match details."
 publish_to: 'none'
 version: 0.1.0+1
 
@@ -10,10 +10,63 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # ── State management (Cubit/Bloc — used by Home & MatchDetail) ──
+  flutter_bloc: ^9.1.1
+
+  # ── Networking (used by HomeCubit & MatchDetailCubit for the API) ──
+  http: ^1.2.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.3
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/icon/
+
+  # ── Fonts ──
+  # The UI is built around 'Barlow' (body) and 'Barlow Condensed'
+  # (headings/scores). Download both families from Google Fonts and
+  # place the .ttf files under assets/fonts/ exactly as named below:
+  # https://fonts.google.com/specimen/Barlow
+  # https://fonts.google.com/specimen/Barlow+Condensed
+  fonts:
+    - family: Barlow
+      fonts:
+        - asset: assets/fonts/Barlow-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Barlow-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Barlow-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Barlow-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Barlow-Black.ttf
+          weight: 900
+
+    - family: Barlow Condensed
+      fonts:
+        - asset: assets/fonts/BarlowCondensed-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/BarlowCondensed-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/BarlowCondensed-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/BarlowCondensed-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/BarlowCondensed-Black.ttf
+          weight: 900
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.png"
+  adaptive_icon_background: "#0a0a0a"
+  adaptive_icon_foreground: "assets/icon/app_icon.png"
+  min_sdk_android: 21
+
+  # dart run flutter_launcher_icons

@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
-import 'package:football_live_score/features/home/cubit/home_cubit.dart'
+import 'package:football_space/features/home/cubit/home_cubit.dart'
     show apiBase;
-import 'package:football_live_score/models/fixture_model.dart';
+import 'package:football_space/models/fixture_model.dart';
 import 'match_detail_state.dart';
 
 class MatchDetailCubit extends Cubit<MatchDetailState> {

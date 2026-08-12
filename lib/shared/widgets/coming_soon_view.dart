@@ -7,7 +7,7 @@
 // ══════════════════════════════════════════════════════════════
 
 import 'package:flutter/material.dart';
-import 'package:football_live_score/config/app_colors.dart';
+import 'package:football_space/config/app_colors.dart';
 
 class ComingSoonView extends StatelessWidget {
   /// Title shown in the top bar (e.g. "QUIZ", "PROFILE").

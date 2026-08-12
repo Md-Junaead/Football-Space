@@ -1,0 +1,56 @@
+name: Flutter CI
+
+# Runs on every push and every PR — just verifies the app builds &
+# passes analysis/tests. Does NOT sign or publish anything anywhere.
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    name: Analyze, Test & Build (debug)
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Get the code ──
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Set up Flutter ──
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Flutter & Dart version
+        run: flutter --version
+
+      # ── 3. Get dependencies ──
+      - name: Install dependencies
+        run: flutter pub get
+
+      # ── 4. Static analysis — catches type errors, unused imports, etc ──
+      - name: Analyze code
+        run: flutter analyze --no-fatal-infos
+
+      # ── 5. Run tests (safe even if you have no test/ files yet) ──
+      - name: Run tests
+        run: flutter test
+
+      # ── 6. Build a debug APK — proves the whole app actually compiles ──
+      # Debug build needs NO signing/keystore, so no secrets required here.
+      - name: Build debug APK
+        run: flutter build apk --debug
+
+      # ── 7. (Optional) Upload the built APK as a workflow artifact ──
+      # Lets you download the APK from the GitHub Actions run page to
+      # test on a phone, without needing a Play Store release.
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug-apk
+          path: build/app/outputs/flutter-apk/app-debug.apk
+          retention-days: 7

@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:football_live_score/models/fixture_model.dart';
+import 'package:football_space/models/fixture_model.dart';
 
 // ═══════════════════════════════════════════════════════════════
 // HOME STATE — Pure immutable data class.

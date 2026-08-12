@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
-import 'package:football_live_score/models/fixture_model.dart';
+import 'package:football_space/models/fixture_model.dart';
 import 'home_state.dart';
 
 // ═══════════════════════════════════════════════════════════════

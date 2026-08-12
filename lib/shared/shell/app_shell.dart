@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:football_live_score/config/app_colors.dart';
-import 'package:football_live_score/features/favorites/view/favorites_screen.dart';
-import 'package:football_live_score/features/home/view/home_screen.dart';
-import 'package:football_live_score/features/leagues/view/leagues_screen.dart';
-import 'package:football_live_score/features/profile/view/profile_screen.dart';
-import 'package:football_live_score/features/quiz/view/quiz_screen.dart';
+import 'package:football_space/config/app_colors.dart';
+import 'package:football_space/features/favorites/view/favorites_screen.dart';
+import 'package:football_space/features/home/view/home_screen.dart';
+import 'package:football_space/features/leagues/view/leagues_screen.dart';
+import 'package:football_space/features/profile/view/profile_screen.dart';
+import 'package:football_space/features/quiz/view/quiz_screen.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});

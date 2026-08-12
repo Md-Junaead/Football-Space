@@ -7,7 +7,7 @@
 // ══════════════════════════════════════════════════════════════
 
 import 'package:flutter/material.dart';
-import 'package:football_live_score/shared/widgets/coming_soon_view.dart';
+import 'package:football_space/shared/widgets/coming_soon_view.dart';
 
 class QuizHomeScreen extends StatelessWidget {
   const QuizHomeScreen({super.key});

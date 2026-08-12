@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:football_live_score/config/app_colors.dart';
-import 'package:football_live_score/features/match_detail/cubit/match_detail_cubit.dart';
-import 'package:football_live_score/features/match_detail/cubit/match_detail_state.dart';
-import 'package:football_live_score/models/fixture_model.dart';
+import 'package:football_space/config/app_colors.dart';
+import 'package:football_space/features/match_detail/cubit/match_detail_cubit.dart';
+import 'package:football_space/features/match_detail/cubit/match_detail_state.dart';
+import 'package:football_space/models/fixture_model.dart';
 
 // ═══════════════════════════════════════════════════════════════
 // MATCH DETAIL SCREEN (View)
