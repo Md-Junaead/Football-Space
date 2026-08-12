@@ -36,9 +36,14 @@ jobs:
       - name: Analyze code
         run: flutter analyze --no-fatal-infos
 
-      # ── 5. Run tests (safe even if you have no test/ files yet) ──
+      # ── 5. Run tests (skips gracefully if you haven't added a test/ folder yet) ──
       - name: Run tests
-        run: flutter test
+        run: |
+          if [ -d "test" ]; then
+            flutter test
+          else
+            echo "No 'test' directory found — skipping (add tests later under test/ to enable this)."
+          fi
 
       # ── 6. Build a debug APK — proves the whole app actually compiles ──
       # Debug build needs NO signing/keystore, so no secrets required here.
