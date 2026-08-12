@@ -1,0 +1,80 @@
+name: Build & Release (APK + AAB)
+
+# Runs on every push to main. Builds a release APK (installable,
+# direct-download for client testing) and AAB (Play Store format,
+# kept for later even though it's not directly installable).
+#
+# NOTE: Signed with Flutter's default DEBUG key (no keystore secrets
+# needed). This build is fine for client review/testing but CANNOT be
+# uploaded to Play Store as-is — Play Store requires a proper release
+# keystore. When you're ready for that, tell me and we'll switch this
+# to use your real upload-keystore.jks via GitHub Secrets.
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: {}   # also lets you trigger it manually if needed
+
+permissions:
+  contents: write   # required so the workflow can create a GitHub Release
+
+jobs:
+  build-and-release:
+    name: Build APK & AAB, publish release
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Get the code ──
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Set up Flutter ──
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Flutter & Dart version
+        run: flutter --version
+
+      # ── 3. Get dependencies ──
+      - name: Install dependencies
+        run: flutter pub get
+
+      # ── 4. Quick sanity check before building release artifacts ──
+      - name: Analyze code
+        run: flutter analyze --no-fatal-infos
+
+      # ── 5. Build release APK — this is what the client installs directly ──
+      - name: Build release APK
+        run: flutter build apk --release
+
+      # ── 6. Build release AAB — kept for later Play Store upload ──
+      - name: Build release AAB
+        run: flutter build appbundle --release
+
+      # ── 7. Give the files clear, versioned names ──
+      - name: Rename build outputs
+        run: |
+          mkdir -p release-files
+          cp build/app/outputs/flutter-apk/app-release.apk \
+             release-files/football-space-build${{ github.run_number }}.apk
+          cp build/app/outputs/bundle/release/app-release.aab \
+             release-files/football-space-build${{ github.run_number }}.aab
+
+      # ── 8. Publish a GitHub Release with both files attached ──
+      # Since the repo is public, this gives you a direct, permanent
+      # download link you can send straight to your client — no
+      # GitHub login required on their end.
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: "Build #${{ github.run_number }}"
+          body: |
+            Automatic client-testing build from commit ${{ github.sha }}.
+            Signed with Flutter's debug key — for direct install/testing only,
+            not for Play Store submission.
+          files: |
+            release-files/football-space-build${{ github.run_number }}.apk
+            release-files/football-space-build${{ github.run_number }}.aab
