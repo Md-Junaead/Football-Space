@@ -1,7 +1,7 @@
 name: football_space
 description: "Football Live Score — live matches, leagues & match details."
 publish_to: 'none'
-version: 0.1.0+1
+version: 0.1.0+3
 
 environment:
   sdk: ^3.12.2
