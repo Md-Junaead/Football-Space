@@ -1,23 +1,25 @@
-name: Build & Release (Real Signed APK + AAB)
+name: Build & Release (APK + AAB)
 
-# Runs on every push to main. Builds a REAL signed release APK+AAB
-# using your actual upload keystore (stored securely as GitHub
-# Secrets) and publishes them as a GitHub Release for download.
+# Runs on every push to main. Builds a release APK (installable,
+# direct-download for client testing) and AAB (Play Store format,
+# kept for later even though it's not directly installable).
 #
-# These files are signed with your real upload key — once your
-# "upload key reset" is approved by Google, these are exactly what
-# you'd upload to Play Console (no rebuild needed).
+# NOTE: Signed with Flutter's default DEBUG key (no keystore secrets
+# needed). This build is fine for client review/testing but CANNOT be
+# uploaded to Play Store as-is — Play Store requires a proper release
+# keystore. When you're ready for that, tell me and we'll switch this
+# to use your real upload-keystore.jks via GitHub Secrets.
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch: {}
+  workflow_dispatch: {}   # also lets you trigger it manually if needed
 
 permissions:
   contents: write   # required so the workflow can create a GitHub Release
 
 jobs:
   build-and-release:
-    name: Build real-signed APK & AAB, publish release
+    name: Build APK & AAB, publish release
     runs-on: ubuntu-latest
 
     steps:
@@ -43,35 +45,15 @@ jobs:
       - name: Analyze code
         run: flutter analyze --no-fatal-infos
 
-      # ── 5. Decode the real keystore from GitHub Secrets ──
-      # This recreates android/app/upload-keystore-new.jks on the CI
-      # runner, ONLY for this run — it's never written to the repo,
-      # never logged, and disappears when the runner is destroyed.
-      - name: Decode keystore from secret
-        run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/upload-keystore-new.jks
-
-      # ── 6. Create key.properties from secrets ──
-      # This is exactly the file you have locally — just generated
-      # fresh here from secrets instead of committed to the repo.
-      - name: Create key.properties from secrets
-        run: |
-          cat <<EOF > android/key.properties
-          storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}
-          keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}
-          storeFile=upload-keystore-new.jks
-          EOF
-
-      # ── 7. Build release APK — now signed with your REAL upload key ──
+      # ── 5. Build release APK — this is what the client installs directly ──
       - name: Build release APK
         run: flutter build apk --release
 
-      # ── 8. Build release AAB — this is what goes to Play Console ──
+      # ── 6. Build release AAB — kept for later Play Store upload ──
       - name: Build release AAB
         run: flutter build appbundle --release
 
-      # ── 9. Give the files clear, versioned names ──
+      # ── 7. Give the files clear, versioned names ──
       - name: Rename build outputs
         run: |
           mkdir -p release-files
@@ -80,27 +62,19 @@ jobs:
           cp build/app/outputs/bundle/release/app-release.aab \
              release-files/football-space-build${{ github.run_number }}.aab
 
-      # ── 10. Publish a GitHub Release with both files attached ──
+      # ── 8. Publish a GitHub Release with both files attached ──
+      # Since the repo is public, this gives you a direct, permanent
+      # download link you can send straight to your client — no
+      # GitHub login required on their end.
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: build-${{ github.run_number }}
-          name: "Build #${{ github.run_number }} (Play Store ready)"
+          name: "Build #${{ github.run_number }}"
           body: |
-            Real-signed build from commit ${{ github.sha }}.
-            Signed with the actual upload key — ready for Play Console
-            once the upload key reset is approved (or for direct
-            client testing right now).
+            Automatic client-testing build from commit ${{ github.sha }}.
+            Signed with Flutter's debug key — for direct install/testing only,
+            not for Play Store submission.
           files: |
             release-files/football-space-build${{ github.run_number }}.apk
             release-files/football-space-build${{ github.run_number }}.aab
-
-      # ── 11. Clean up the decoded keystore from the runner ──
-      # The runner is destroyed after the job anyway, but this is
-      # good hygiene — never leave secrets lying around longer than
-      # needed.
-      - name: Clean up sensitive files
-        if: always()
-        run: |
-          rm -f android/app/upload-keystore-new.jks
-          rm -f android/key.properties
